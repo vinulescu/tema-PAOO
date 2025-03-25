@@ -1,0 +1,37 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class SumaNumerelorIntregi {
+    public static void main(String[] args) {
+        String fileName = "fisier.txt"; // Numele fișierului
+
+        try {
+            int suma = calculeazaSumaNumerelorIntregi(fileName);
+            System.out.println("Suma numerelor întregi din fișier este: " + suma);
+        } catch (IOException e) {
+            System.err.println("Eroare la citirea fișierului: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.err.println("Eroare la conversia unui număr: " + e.getMessage());
+        }
+    }
+
+    public static int calculeazaSumaNumerelorIntregi(String fileName) throws IOException {
+        int suma = 0;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String linie;
+            while ((linie = reader.readLine()) != null) {
+                try {
+                    // Încearcă să convertești linia într-un număr întreg
+                    suma += Integer.parseInt(linie);
+                } catch (NumberFormatException e) {
+                    // Dacă nu este un număr întreg valid, ignoră linia
+                    // excepția va fi prinsă și linia nu va fi adăugată la sumă
+                }
+            }
+        }
+
+        return suma;
+    }
+}

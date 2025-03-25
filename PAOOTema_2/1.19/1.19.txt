@@ -1,0 +1,40 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+class Student {
+    private String nume;
+    private int nota;
+
+    public Student(String nume, int nota) {
+        this.nume = nume;
+        this.nota = nota;
+    }
+
+    public int getNota() {
+        return nota;
+    }
+
+    @Override
+    public String toString() {
+        return nume + " - " + nota;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // Crearea listei de studenți
+        List<Student> studenti = new ArrayList<>();
+        studenti.add(new Student("Alex", 85));
+        studenti.add(new Student("Maria", 92));
+        studenti.add(new Student("Ion", 78));
+        studenti.add(new Student("Elena", 88));
+
+        // Sortarea listei după notă folosind Comparator
+        Collections.sort(studenti, Comparator.comparingInt(Student::getNota));
+
+        // Afișarea listei sortate
+        System.out.println("Lista sortată după notă: " + studenti);
+    }
+}
