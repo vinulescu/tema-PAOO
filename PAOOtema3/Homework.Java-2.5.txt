@@ -1,0 +1,39 @@
+class C2Nr {
+    private int num1;
+    private int num2;
+
+    public C2Nr(int n1, int n2) {
+        this.num1 = n1;
+        this.num2 = n2;
+    }
+
+    public int getSum() {
+        return this.num1 + this.num2;
+    }
+}
+
+class C3Nr {
+    private int num1;
+    private int num2;
+    private int num3;
+
+    public C3Nr(int n1, int n2, int n3) {
+        this.num1 = n1;
+        this.num2 = n2;
+        this.num3 = n3;
+    }
+
+    public int getSum() {
+        return this.num1 + this.num2 + this.num3;
+    }
+}
+
+public class MainNr {
+    public static void main(String[] args) {
+        C2Nr calculator2Nr = new C2Nr(10, 20);
+        System.out.println("Suma a doua numere: " + calculator2Nr.getSum()); // Ieșire: Suma a doua numere: 30
+
+        C3Nr calculator3Nr = new C3Nr(5, 15, 25);
+        System.out.println("Suma a trei numere: " + calculator3Nr.getSum()); // Ieșire: Suma a trei numere: 45
+    }
+}

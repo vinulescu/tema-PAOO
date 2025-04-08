@@ -1,0 +1,68 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+class Student {
+    private String nume;
+
+    public Student(String nume) {
+        this.nume = nume;
+    }
+
+    public String getNume() {
+        return nume;
+    }
+
+    public String trimitePrezenta() {
+        Random random = new Random();
+        // Generează un număr aleator între 0 (inclusiv) și 2 (exclusiv)
+        // 0 -> absent, 1 -> prezent
+        return random.nextInt(2) == 0 ? "absent" : "prezent";
+    }
+}
+
+class Curs {
+    private String numeCurs;
+    private List<Student> studentiInscrisi;
+
+    public Curs(String numeCurs) {
+        this.numeCurs = numeCurs;
+        this.studentiInscrisi = new ArrayList<>();
+    }
+
+    public void inscrieStudent(Student student) {
+        this.studentiInscrisi.add(student);
+    }
+
+    public void prezenta() {
+        System.out.println("\n--- Prezența la cursul: " + this.numeCurs + " ---");
+        for (Student student : this.studentiInscrisi) {
+            String status = student.trimitePrezenta();
+            System.out.println("Student: " + student.getNume() + ", Status: " + status);
+        }
+    }
+}
+
+public class MainPrezenta {
+    public static void main(String[] args) {
+        // Creăm un curs
+        Curs programare = new Curs("Programare Java");
+
+        // Creăm studenți
+        Student ion = new Student("Ion Popescu");
+        Student ana = new Student("Ana Maria");
+        Student andrei = new Student("Andrei Georgescu");
+        Student elena = new Student("Elena Voicu");
+
+        // Înscriem studenții la curs
+        programare.inscrieStudent(ion);
+        programare.inscrieStudent(ana);
+        programare.inscrieStudent(andrei);
+        programare.inscrieStudent(elena);
+
+        // Apelăm metoda prezenta() de mai multe ori
+        programare.prezenta();
+        programare.prezenta();
+        programare.prezenta();
+    }
+}

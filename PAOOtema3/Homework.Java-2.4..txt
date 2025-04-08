@@ -1,0 +1,76 @@
+import java.util.Scanner;
+import org.json.JSONObject;
+
+class C1 {
+    private int num1;
+    private int num2;
+
+    public C1() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Introduceti primul numar: ");
+        this.num1 = scanner.nextInt();
+        System.out.print("Introduceti al doilea numar: ");
+        this.num2 = scanner.nextInt();
+        // scanner.close(); // Atenție: închiderea scanner-ului aici poate afecta alte citiri
+    }
+
+    public int getSum() {
+        return this.num1 + this.num2;
+    }
+}
+
+class C2 {
+    private JSONObject jsonData;
+
+    public C2(String jsonString) {
+        this.jsonData = new JSONObject(jsonString);
+    }
+
+    public int getNum1() {
+        return this.jsonData.getInt("n1");
+    }
+
+    public int getNum2() {
+        return this.jsonData.getInt("n2");
+    }
+}
+
+// Interfața țintă (interfața pe care clientul o așteaptă)
+interface Calculator {
+    int getSum();
+}
+
+// Adaptorul care implementează interfața țintă și adaptează C2 la C1
+class C1Adapter implements Calculator {
+    private C2 adaptee;
+
+    public C1Adapter(C2 adaptee) {
+        this.adaptee = adaptee;
+    }
+
+    @Override
+    public int getSum() {
+        return adaptee.getNum1() + adaptee.getNum2();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // Utilizarea clasei C1 direct
+        C1 calculatorC1 = new C1();
+        System.out.println("Suma calculata de C1: " + calculatorC1.getSum());
+
+        // Utilizarea clasei C2 direct
+        String jsonInput = "{\"n1\":15, \"n2\":25}";
+        C2 jsonParserC2 = new C2(jsonInput);
+        System.out.println("Numarul 1 din C2: " + jsonParserC2.getNum1());
+        System.out.println("Numarul 2 din C2: " + jsonParserC2.getNum2());
+        System.out.println("Suma numerelor din C2: " + (jsonParserC2.getNum1() + jsonParserC2.getNum2()));
+
+        // Utilizarea adaptorului C1Adapter pentru a folosi C2 ca și C1
+        String jsonForAdapter = "{\"n1\":10, \"n2\":30}";
+        C2 instanceOfC2 = new C2(jsonForAdapter);
+        Calculator instanceOfC1 = new C1Adapter(instanceOfC2); // Observați că stocăm adaptorul într-o variabilă de tipul interfeței țintă
+        System.out.println("Suma calculata prin adaptor: " + instanceOfC1.getSum());
+    }
+}

@@ -1,0 +1,118 @@
+class Product {
+    private int id;
+    private String name;
+    private double priceUSD;
+
+    public Product(int id, String name, double priceUSD) {
+        this.id = id;
+        this.name = name;
+        this.priceUSD = priceUSD;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getPriceUSD() {
+        return priceUSD;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+               "id=" + id +
+               ", name='" + name + '\'' +
+               ", priceUSD=" + priceUSD +
+               '}';
+    }
+}
+
+class Produs {
+    private int id;
+    private String nume;
+    private double pretLei;
+
+    public Produs(int id, String nume, double pretLei) {
+        this.id = id;
+        this.nume = nume;
+        this.pretLei = pretLei;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getNume() {
+        return nume;
+    }
+
+    public double getPretLei() {
+        return pretLei;
+    }
+
+    @Override
+    public String toString() {
+        return "Produs{" +
+               "id=" + id +
+               ", nume='" + nume + '\'' +
+               ", pretLei=" + pretLei +
+               '}';
+    }
+}
+
+class ProductAdapterHelper {
+
+    private final double exchangeRateUSDToRON;
+
+    public ProductAdapterHelper(double exchangeRateUSDToRON) {
+        this.exchangeRateUSDToRON = exchangeRateUSDToRON;
+    }
+
+    // Metoda pentru a converti un Product (USD) in Produs (RON)
+    public Produs ProductToProdus(Product product) {
+        int id = product.getId();
+        String nume = product.getName();
+        double pretLei = product.getPriceUSD() * exchangeRateUSDToRON;
+        return new Produs(id, nume, pretLei);
+    }
+
+    // Metoda pentru a converti un Produs (RON) in Product (USD)
+    public Product ProdusToProduct(Produs produs) {
+        int id = produs.getId();
+        String name = produs.getNume();
+        double priceUSD = produs.getPretLei() / exchangeRateUSDToRON;
+        return new Product(id, name, priceUSD);
+    }
+}
+
+public class MainAdapter {
+    public static void main(String[] args) {
+        // Stabilim rata de schimb
+        double rataSchimb = 4.95; // Exemplu de rată de schimb USD/RON
+
+        // Cream instanța helper-ului adaptor
+        ProductAdapterHelper adapterHelper = new ProductAdapterHelper(rataSchimb);
+
+        // Cream un obiect Product (in USD)
+        Product productUSD = new Product(1, "Laptop", 1200.50);
+        System.out.println("Produs in USD: " + productUSD);
+
+        // Convertim Product in Produs (in RON) folosind adaptorul
+        Produs produsRON = adapterHelper.ProductToProdus(productUSD);
+        System.out.println("Produs in RON (dupa adaptare): " + produsRON);
+
+        System.out.println("--------------------");
+
+        // Cream un obiect Produs (in RON)
+        Produs produsRON2 = new Produs(2, "Tastatura", 75.00);
+        System.out.println("Produs in RON: " + produsRON2);
+
+        // Convertim Produs in Product (in USD) folosind adaptorul
+        Product productUSD2 = adapterHelper.ProdusToProduct(produsRON2);
+        System.out.println("Produs in USD (dupa adaptare): " + productUSD2);
+    }
+}

@@ -1,0 +1,111 @@
+import java.util.Scanner;
+
+// Interface for all shapes that can compute area
+interface Shape {
+    double calculateArea();
+    String getName();
+}
+
+// Concrete class for Rectangle
+class Rectangle implements Shape {
+    private float width;
+    private float height;
+
+    public Rectangle(float width, float height) {
+        this.width = width;
+        this.height = height;
+    }
+
+    @Override
+    public double calculateArea() {
+        return width * height;
+    }
+
+    @Override
+    public String getName() {
+        return "Rectangle";
+    }
+}
+
+// Concrete class for Circle
+class Circle implements Shape {
+    private float radius;
+
+    public Circle(float radius) {
+        this.radius = radius;
+    }
+
+    @Override
+    public double calculateArea() {
+        return Math.PI * radius * radius;
+    }
+
+    @Override
+    public String getName() {
+        return "Circle";
+    }
+}
+
+// Factory class to create Shape objects
+class ShapeFactory {
+    public static Shape createShape(String type, float... dimensions) {
+        switch (type.toLowerCase()) {
+            case "rectangle":
+                if (dimensions.length == 2) {
+                    return new Rectangle(dimensions[0], dimensions[1]);
+                } else {
+                    throw new IllegalArgumentException("Rectangle requires two dimensions (width and height).");
+                }
+            case "circle":
+                if (dimensions.length == 1) {
+                    return new Circle(dimensions[0]);
+                } else {
+                    throw new IllegalArgumentException("Circle requires one dimension (radius).");
+                }
+            default:
+                throw new IllegalArgumentException("Invalid shape type: " + type);
+        }
+    }
+}
+
+public class ShapeAreaCalculator {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Welcome to the Shape Area Calculator!");
+        System.out.println("Available shapes: Rectangle, Circle");
+        System.out.print("Enter the shape you want to calculate the area for: ");
+        String shapeType = scanner.nextLine();
+
+        Shape shape = null;
+
+        try {
+            switch (shapeType.toLowerCase()) {
+                case "rectangle":
+                    System.out.print("Enter width: ");
+                    float width = scanner.nextFloat();
+                    System.out.print("Enter height: ");
+                    float height = scanner.nextFloat();
+                    shape = ShapeFactory.createShape("rectangle", width, height);
+                    break;
+                case "circle":
+                    System.out.print("Enter radius: ");
+                    float radius = scanner.nextFloat();
+                    shape = ShapeFactory.createShape("circle", radius);
+                    break;
+                default:
+                    System.out.println("Invalid shape type entered.");
+            }
+
+            if (shape != null) {
+                double area = shape.calculateArea();
+                System.out.println("The area of the " + shape.getName() + " is: " + area);
+            }
+
+        } catch (IllegalArgumentException e) {
+            System.err.println("Error: " + e.getMessage());
+        } finally {
+            scanner.close();
+        }
+    }
+}

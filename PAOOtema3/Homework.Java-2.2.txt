@@ -1,0 +1,96 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+class WebHelper {
+    private static WebHelper instance;
+    private String websiteContent;
+    private final String websiteUrl = "https://www.example.com"; // URL hardcodat
+
+    private WebHelper() {
+        // Constructor privat pentru a preveni instanțierea directă
+        this.websiteContent = null;
+    }
+
+    public static WebHelper getInstance() {
+        if (instance == null) {
+            synchronized (WebHelper.class) {
+                if (instance == null) {
+                    instance = new WebHelper();
+                }
+            }
+        }
+        return instance;
+    }
+
+    public String getWebSiteContent() {
+        if (websiteContent == null) {
+            synchronized (this) {
+                if (websiteContent == null) {
+                    websiteContent = loadWebsiteContent();
+                }
+            }
+        }
+        return websiteContent;
+    }
+
+    private String loadWebsiteContent() {
+        StringBuilder content = new StringBuilder();
+        HttpURLConnection connection = null;
+        BufferedReader reader = null;
+
+        try {
+            URL url = new URL(websiteUrl);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    content.append(line);
+                }
+            } else {
+                System.err.println("Eroare la încărcarea paginii web. Cod de răspuns: " + responseCode);
+                return null;
+            }
+        } catch (IOException e) {
+            System.err.println("Eroare I/O la accesarea paginii web: " + e.getMessage());
+            return null;
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    System.err.println("Eroare la închiderea reader-ului: " + e.getMessage());
+                }
+            }
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+        return content.toString();
+    }
+}
+
+public class WebContentApp {
+    public static void main(String[] args) {
+        // Obținem instanța Singleton a clasei WebHelper
+        WebHelper helper1 = WebHelper.getInstance();
+        WebHelper helper2 = WebHelper.getInstance();
+
+        // Verificăm dacă am obținut aceeași instanță
+        System.out.println("helper1 == helper2: " + (helper1 == helper2));
+
+        // Apelăm metoda getWebSiteContent() de mai multe ori
+        System.out.println("Conținutul paginii web (prima accesare):\n" + helper1.getWebSiteContent());
+        System.out.println("\nConținutul paginii web (a doua accesare):\n" + helper2.getWebSiteContent());
+
+        // Dacă se apelează din nou, conținutul ar trebui să fie deja în memorie
+        WebHelper helper3 = WebHelper.getInstance();
+        System.out.println("\nConținutul paginii web (a treia accesare):\n" + helper3.getWebSiteContent());
+    }
+}

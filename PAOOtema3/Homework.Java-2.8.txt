@@ -1,0 +1,165 @@
+import java.util.ArrayList;
+import java.util.List;
+
+// Interfață pentru aparatele electrice
+interface AparatElectric {
+    String getNume();
+    void conectat();
+    void deconectat();
+}
+
+// Implementare pentru un aparat de cafea
+class AparatCafea implements AparatElectric {
+    private String nume;
+
+    public AparatCafea(String nume) {
+        this.nume = nume;
+    }
+
+    @Override
+    public String getNume() {
+        return nume;
+    }
+
+    @Override
+    public void conectat() {
+        System.out.println("Aparatul de cafea '" + nume + "' a fost conectat la curent.");
+    }
+
+    @Override
+    public void deconectat() {
+        System.out.println("Aparatul de cafea '" + nume + "' a fost deconectat de la curent.");
+    }
+}
+
+// Implementare pentru un frigider
+class Frigider implements AparatElectric {
+    private String nume;
+
+    public Frigider(String nume) {
+        this.nume = nume;
+    }
+
+    @Override
+    public String getNume() {
+        return nume;
+    }
+
+    @Override
+    public void conectat() {
+        System.out.println("Frigiderul '" + nume + "' a fost conectat la curent.");
+    }
+
+    @Override
+    public void deconectat() {
+        System.out.println("Frigiderul '" + nume + "' a fost deconectat de la curent.");
+    }
+}
+
+// Implementare pentru un televizor
+class Televizor implements AparatElectric {
+    private String nume;
+
+    public Televizor(String nume) {
+        this.nume = nume;
+    }
+
+    @Override
+    public String getNume() {
+        return nume;
+    }
+
+    @Override
+    public void conectat() {
+        System.out.println("Televizorul '" + nume + "' a fost conectat la curent.");
+    }
+
+    @Override
+    public void deconectat() {
+        System.out.println("Televizorul '" + nume + "' a fost deconectat de la curent.");
+    }
+}
+
+// Clasa Prelungitor
+class Prelungitor {
+    private List<AparatElectric> aparateConectate;
+    private boolean esteConectat;
+
+    public Prelungitor() {
+        this.aparateConectate = new ArrayList<>();
+        this.esteConectat = false;
+    }
+
+    public void adaugaAparat(AparatElectric aparat) {
+        this.aparateConectate.add(aparat);
+        if (esteConectat) {
+            aparat.conectat(); // Dacă prelungitorul este deja conectat, conectează și noul aparat
+        }
+    }
+
+    public void scoateAparat(AparatElectric aparat) {
+        this.aparateConectate.remove(aparat);
+        if (esteConectat) {
+            aparat.deconectat(); // Dacă prelungitorul este conectat, deconectează și aparatul scos
+        }
+    }
+
+    public void conecteazaLaPriza() {
+        if (!esteConectat) {
+            System.out.println("\nPrelungitorul a fost conectat la priză.");
+            esteConectat = true;
+            for (AparatElectric aparat : aparateConectate) {
+                aparat.conectat();
+            }
+        } else {
+            System.out.println("Prelungitorul este deja conectat la priză.");
+        }
+    }
+
+    public void scoateDinPriza() {
+        if (esteConectat) {
+            System.out.println("\nPrelungitorul a fost scos din priză.");
+            esteConectat = false;
+            for (AparatElectric aparat : aparateConectate) {
+                aparat.deconectat();
+            }
+        } else {
+            System.out.println("Prelungitorul nu este conectat la priză.");
+        }
+    }
+}
+
+public class MainPrelungitor {
+    public static void main(String[] args) {
+        // Creăm aparate electrice
+        AparatElectric aparatCafea = new AparatCafea("Philips");
+        AparatElectric frigider = new Frigider("Samsung");
+        AparatElectric televizor = new Televizor("Sony");
+
+        // Creăm un prelungitor
+        Prelungitor prelungitor = new Prelungitor();
+
+        // Adăugăm aparatele la prelungitor
+        prelungitor.adaugaAparat(aparatCafea);
+        prelungitor.adaugaAparat(frigider);
+        prelungitor.adaugaAparat(televizor);
+
+        // Conectăm prelungitorul la priză
+        prelungitor.conecteazaLaPriza();
+
+        System.out.println("\n--- Scoatem prelungitorul ---");
+        // Scoatem prelungitorul din priză
+        prelungitor.scoateDinPriza();
+
+        System.out.println("\n--- Reconectăm prelungitorul ---");
+        // Reconectăm prelungitorul la priză
+        prelungitor.conecteazaLaPriza();
+
+        System.out.println("\n--- Scoatem un aparat ---");
+        // Scoatem un aparat din prelungitor
+        prelungitor.scoateAparat(aparatCafea);
+
+        System.out.println("\n--- Conectăm din nou prelungitorul (fără aparatul de cafea) ---");
+        prelungitor.conecteazaLaPriza();
+    }
+}
