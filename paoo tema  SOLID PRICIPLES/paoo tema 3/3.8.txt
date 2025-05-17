@@ -1,0 +1,21 @@
+interface Drawable {
+    void draw();
+}
+
+class CircleShape implements Drawable {
+    public void draw() {
+        System.out.println("Drawing circle");
+    }
+}
+
+class RectangleShape implements Drawable {
+    public void draw() {
+        System.out.println("Drawing rectangle");
+    }
+}
+
+class DrawingTool {
+    public void drawShape(Drawable shape) {
+        shape.draw();
+    }
+}

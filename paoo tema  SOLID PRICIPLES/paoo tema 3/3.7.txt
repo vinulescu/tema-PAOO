@@ -1,0 +1,11 @@
+class MethodInjectUser {
+    private CoffeeMachine coffeeMachine;
+
+    public void setCoffeeMachine(CoffeeMachine cm) {
+        this.coffeeMachine = cm;
+    }
+
+    public void brew() {
+        coffeeMachine.makeCoffee();
+    }
+}

@@ -1,0 +1,42 @@
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
+import java.io.IOException;
+
+class EquationResult {
+    public String status;
+    public Double solution;
+
+    public EquationResult(String status, Double solution) {
+        this.status = status;
+        this.solution = solution;
+    }
+}
+
+public class EquationSolver {
+
+    public static EquationResult solveEquation(double a, double b) {
+        if (a == 0 && b == 0) {
+            return new EquationResult("Infinit de soluții", null);
+        } else if (a == 0) {
+            return new EquationResult("Nicio soluție", null);
+        } else {
+            double x = -b / a;
+            return new EquationResult("O soluție", x);
+        }
+    }
+
+    public static void saveToJSON(EquationResult result, String filename) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            mapper.writerWithDefaultPrettyPrinter().writeValue(new File(filename), result);
+            System.out.println("Rezultatul a fost salvat în " + filename);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        EquationResult result = solveEquation(2, -4);
+        saveToJSON(result, "equation_result.json");
+    }
+}

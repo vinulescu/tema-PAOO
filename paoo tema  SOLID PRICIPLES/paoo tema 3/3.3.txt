@@ -1,0 +1,25 @@
+interface Shape {
+    double getArea();
+}
+
+class Circle implements Shape {
+    double radius;
+    public Circle(double radius) { this.radius = radius; }
+    public double getArea() { return Math.PI * radius * radius; }
+}
+
+class Square implements Shape {
+    double side;
+    public Square(double side) { this.side = side; }
+    public double getArea() { return side * side; }
+}
+
+class AreaCalculator {
+    public static double sumAreas(Shape[] shapes) {
+        double total = 0;
+        for (Shape shape : shapes) {
+            total += shape.getArea();
+        }
+        return total;
+    }
+}

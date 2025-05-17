@@ -1,0 +1,16 @@
+class Rectangle implements Shape {
+    double width, height;
+    public Rectangle(double w, double h) { this.width = w; this.height = h; }
+    public double getArea() { return width * height; }
+}
+
+class ShapeMain {
+    public static void main(String[] args) {
+        Shape[] shapes = {
+            new Circle(2),
+            new Square(3),
+            new Rectangle(4, 5)
+        };
+        System.out.println("Total area: " + AreaCalculator.sumAreas(shapes));
+    }
+}

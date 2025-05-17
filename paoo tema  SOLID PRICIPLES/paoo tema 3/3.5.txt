@@ -1,0 +1,12 @@
+class CoffeeMachine {
+    public void makeCoffee() {
+        System.out.println("Making coffee...");
+    }
+}
+
+class UserCoffee {
+    public static void main(String[] args) {
+        CoffeeMachine cm = new CoffeeMachine();
+        cm.makeCoffee();
+    }
+}

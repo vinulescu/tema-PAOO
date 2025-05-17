@@ -1,0 +1,11 @@
+class AdvancedCoffeeUser {
+    private CoffeeMachine coffeeMachine;
+
+    public AdvancedCoffeeUser(CoffeeMachine coffeeMachine) {
+        this.coffeeMachine = coffeeMachine;
+    }
+
+    public void makeCoffee() {
+        coffeeMachine.makeCoffee();
+    }
+}
